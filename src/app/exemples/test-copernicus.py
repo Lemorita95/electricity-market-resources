@@ -9,7 +9,7 @@ from app.api.parser import parse_weather
 client = CopernicusClient()
 
 START = datetime(2025, 5, 30, tzinfo=timezone.utc)
-END = datetime(2025, 6, 5, tzinfo=timezone.utc)
+END = datetime(2025, 6, 1, tzinfo=timezone.utc)
 
 cfg = QUERY_CONFIGS['copernicus']
 dataset = cfg['dataset']
@@ -25,4 +25,4 @@ location = 'SE1'
 
 results = get_era5(location, START, END)
 
-print()
+print(results)

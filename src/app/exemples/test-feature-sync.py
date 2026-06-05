@@ -1,8 +1,9 @@
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from sqlmodel import Session
 
-from app.db.connection import init_db, engine
-from app.db.queries import get_source_timestamps, fetch_features
+from app.bootstrap.init_db import init_db
+from app.db.connection import engine
+from app.db.queries import get_source_timestamps
 from app.ingestion.feature_sync import fetch_zone_date_source
 from app.config import EIC_CODES
 

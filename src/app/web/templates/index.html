@@ -358,11 +358,22 @@
       pollInterval = setInterval(async () => {
         const status = await fetch('/api/fetch/status').then(r => r.json());
 
-        if (status && !status[key]) {
+        const job = status[key];
+
+        if (!job) return;
+
+        if (job.status === "done" || job.status === "failed") {
           clearInterval(pollInterval);
+
           btn.disabled = false;
           btn.classList.remove('running');
-          btn.textContent = key === 'all' ? '↻ refresh all' : '↻ sync';
+
+          btn.textContent =
+            key === 'all' ? '↻ refresh all' : '↻ sync';
+
+          if (job.status === "failed") {
+            console.error(job.error);
+          }
         }
       }, 2000);
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.bootstrap.init_db import init_db
 from app.db import model
 from app.db.connection import init_db, get_session
 from app.api.endpoint import get_price

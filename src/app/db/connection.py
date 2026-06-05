@@ -14,10 +14,6 @@ engine = create_engine(DATABASE_URL)
 async_engine = create_async_engine(_build_async_url(DATABASE_URL), future=True)
 
 
-def init_db():
-    SQLModel.metadata.create_all(admin_engine)  # admin creates tables
-
-
 def get_session():
     with Session(engine) as session:
         yield session
