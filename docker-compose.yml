@@ -7,11 +7,22 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init.sh:/docker-entrypoint-initdb.d/init.sh
+  app:
+    build: .
+    environment:
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "8000:8000"
 
 volumes:
   postgres_data:

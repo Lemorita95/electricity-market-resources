@@ -16,11 +16,11 @@ BASE = Path(__file__).resolve().parent
 templates = BASE / "templates"
 
 fetch_lock = threading.Lock()
-fetch_status_map: dict[str, bool] = {
-    'entsoe_price': False,
-    'entsoe_demand': False,
-    'copernicus': False,
-    'all': False,
+fetch_status_map: dict[str, dict] = {
+    "entsoe_price": {"status": "idle"},
+    "entsoe_demand": {"status": "idle"},
+    "copernicus": {"status": "idle"},
+    "all": {"status": "idle"},
 }
 
 router = APIRouter()
@@ -81,18 +81,21 @@ def get_weather(zone: str, start: datetime, end: datetime, column: str, session:
 
 def _run_in_background(source: str | None, start: datetime | None = None, end: datetime | None = None):
     key = source or 'all'
+
     with fetch_lock:
-        if fetch_status_map[key]:
+        if fetch_status_map[key]["status"] == "running":
             return False
-        fetch_status_map[key] = True
+        fetch_status_map[key]["status"] = "queued"
 
     def run():
+        fetch_status_map[key]["status"] = "running"
+
         try:
             sync_feature(source=source, start=start, end=end)
+            fetch_status_map[key]["status"] = "done"
         except Exception as e:
-            print(f"[fetch] {key} failed: {e}")
-        finally:
-            fetch_status_map[key] = False
+            fetch_status_map[key]["status"] = "failed"
+            fetch_status_map[key]["error"] = str(e)
 
     threading.Thread(target=run, daemon=True).start()
     return True

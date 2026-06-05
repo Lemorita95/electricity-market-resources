@@ -2,11 +2,10 @@ from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from sqlmodel import Session
 
-from app.db.connection import init_db, engine
+from app.db.connection import engine
 from app.db.queries import upsert_feature_rows, get_source_timestamps
-from app.api.endpoint import get_price, get_demand, entsoe_client, get_era5, copernicus_client
+from app.api.endpoint import get_price, get_demand, get_era5
 from app.config import EIC_CODES
-from app.ingestion.utils import TerminalMonitor
 
 def get_fetch_start() -> datetime:
     return datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)

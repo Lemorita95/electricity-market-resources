@@ -1,8 +1,6 @@
 import uvicorn
-from app.db.connection import init_db
 from app.web.app import create_app
 
-init_db()
 app = create_app()
 
 if __name__ == "__main__":
