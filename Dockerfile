@@ -9,4 +9,7 @@ COPY . .
 
 ENV PYTHONPATH=/app/src
 
-CMD ["python", "src/app/main.py"]
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
