@@ -27,6 +27,13 @@ services:
       DB_NAME: ${POSTGRES_DB}
       DB_HOST: db
       DB_PORT: 5432
+      CDS_API_URL: ${CDS_API_URL}
+      CDS_API_KEY: ${CDS_API_KEY}
+      ENTSOE_BASE_URL: ${ENTSOE_BASE_URL}
+      ENTSOE_API_KEY: ${ENTSOE_API_KEY}
+      EUMDAC_CONSUMER_KEY: ${EUMDAC_CONSUMER_KEY}
+      EUMDAC_CONSUMER_SECRET: ${EUMDAC_CONSUMER_SECRET}
+
     ports:
       - "8000:8000"
     depends_on:
