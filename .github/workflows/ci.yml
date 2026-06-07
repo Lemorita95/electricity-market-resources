@@ -19,25 +19,31 @@ jobs:
         run: docker build -t electricity-db-app:ci .
 
   test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      name: Run Tests
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+        - name: Install dependencies
+          run: pip install -r requirements.txt
 
-      - name: Run pytest
-        run: pytest tests/ -v
-        env:
-          PYTHONPATH: src
+        - name: Run pytest
+          run: pytest tests/ -v
+          env:
+            PYTHONPATH: src
+            EUMDAC_CONSUMER_KEY: ${{ secrets.EUMDAC_CONSUMER_KEY }}
+            EUMDAC_CONSUMER_SECRET: ${{ secrets.EUMDAC_CONSUMER_SECRET }}
+            ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
+            ENTSOE_BASE_URL: ${{ secrets.ENTSOE_BASE_URL }}
+            CDS_API_URL: ${{ secrets.CDS_API_URL }}
+            CDS_API_KEY: ${{ secrets.CDS_API_KEY }}
 
   security:
     name: Security Scan
