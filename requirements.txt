@@ -41,3 +41,4 @@ uvicorn==0.48.0
 xarray==2026.4.0
 pytest==9.0.3
 httpx2==2.3.0
+alembic==1.18.4
