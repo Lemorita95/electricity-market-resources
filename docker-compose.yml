@@ -7,11 +7,38 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init.sh:/docker-entrypoint-initdb.d/init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    environment:
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_HOST: db
+      DB_PORT: 5432
+      CDS_API_URL: ${CDS_API_URL}
+      CDS_API_KEY: ${CDS_API_KEY}
+      ENTSOE_BASE_URL: ${ENTSOE_BASE_URL}
+      ENTSOE_API_KEY: ${ENTSOE_API_KEY}
+      EUMDAC_CONSUMER_KEY: ${EUMDAC_CONSUMER_KEY}
+      EUMDAC_CONSUMER_SECRET: ${EUMDAC_CONSUMER_SECRET}
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
