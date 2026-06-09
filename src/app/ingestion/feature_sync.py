@@ -69,10 +69,11 @@ def sync_feature(start: datetime | None = None, end: datetime | None = None, sou
         futures = {}
         for zone in EIC_CODES:
             callback = lambda msg, q='', z=zone: progress_callback(z, msg, q) if progress_callback else None
-            if source:
-                future = executor.submit(fetch_zone_date_source, zone, start, end, source, progress_callback=callback)
-            else:
+            if (source == 'all') or source is None:
                 future = executor.submit(fetch_zone_date, zone, start, end, progress_callback=callback)
+            else:
+                future = executor.submit(fetch_zone_date_source, zone, start, end, source, progress_callback=callback)
+                
             futures[future] = zone
         for future in as_completed(futures):
             zone = futures[future]
